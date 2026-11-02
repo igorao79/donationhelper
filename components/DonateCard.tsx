@@ -280,6 +280,21 @@ export function DonateCard({ author, methods, initialId, streamSeconds }: Props)
                 ),
               )}
             </nav>
+
+            {!isStream && (
+              <p className="credit">
+                <small>
+                  Хотите такую же карточку?{" "}
+                  <a
+                    href="https://t.me/igorao79"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    @igorao79
+                  </a>
+                </small>
+              </p>
+            )}
           </div>
         </div>
       </article>

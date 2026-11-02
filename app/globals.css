@@ -484,6 +484,24 @@ a.head__author {
   animation: timer var(--rotate) linear both;
 }
 
+.credit {
+  margin-top: 0.4em;
+  padding-inline: var(--pad);
+  line-height: 1;
+  opacity: 0.6;
+}
+
+/* Размер на вложенном элементе, чтобы отступы совпадали с блоками выше */
+.credit small {
+  font-size: max(0.6em, 10px);
+  line-height: 1.2;
+}
+
+.credit a {
+  text-decoration: underline;
+  text-underline-offset: 0.15em;
+}
+
 :focus-visible {
   outline: 3px solid var(--ink);
   outline-offset: 2px;
@@ -515,8 +533,13 @@ a.head__author {
   }
 
   .head,
-  .tabs {
+  .tabs,
+  .credit {
     --pad: 0.9em;
+  }
+
+  .credit {
+    margin-top: 0.3em;
   }
 
   .title {
@@ -585,9 +608,18 @@ a.head__author {
     padding: 0.3em 0.6em 0.7em;
   }
 
+  /* Подпись на цветной полоске под QR */
+  .credit {
+    order: 5;
+    margin-top: -0.4em;
+    padding-bottom: 0.35em;
+    text-align: center;
+  }
+
   .head,
   .main,
-  .tabs {
+  .tabs,
+  .credit {
     --pad: 1em;
   }
 
