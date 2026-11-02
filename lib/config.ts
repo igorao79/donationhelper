@@ -11,7 +11,23 @@ function parsePhone(raw: string) {
   return { value, chunks: ru ? ru.slice(1) : byFour(value) };
 }
 
-function usdt(id: string, network: string, address: string, color: string): Method {
+const SCAN_IN_WALLET = "Отсканируй сканером внутри кошелька";
+
+/**
+ * В QR зашита ссылка, которую камера телефона предлагает открыть в кошельке.
+ * Адрес получателя идёт первым: сканер, понимающий только адрес, не примет за него контракт токена.
+ */
+const USDT_TON_MASTER = "EQCxE6mUtQJKFnGfaROTKOt1lZbDiiX1kCixRv7Nw2Id_sDs";
+const BSC_CHAIN_ID = 56;
+
+function usdt(
+  id: string,
+  network: string,
+  address: string,
+  color: string,
+  qr = address,
+  scanHint = SCAN_IN_WALLET,
+): Method {
   return {
     id,
     group: "usdt",
@@ -22,9 +38,9 @@ function usdt(id: string, network: string, address: string, color: string): Meth
     fieldLabel: "Адрес кошелька",
     value: address,
     chunks: byFour(address),
-    qr: address,
+    qr,
     qrLabel: `USDT ${network}`,
-    scanHint: "Отсканируй сканером внутри кошелька",
+    scanHint,
     note: `Отправляй только USDT и только в сети ${network}. В другой сети перевод может потеряться.`,
     color,
   };
@@ -113,10 +129,32 @@ export function getMethods(): Method[] {
   if (trc20) methods.push(usdt("trc20", "TRC20", trc20, "#ff5a4d"));
 
   const bep20 = env("USDT_BEP20");
-  if (bep20) methods.push(usdt("bep20", "BEP20", bep20, "#ffd21f"));
+  if (bep20) {
+    methods.push(
+      usdt(
+        "bep20",
+        "BEP20",
+        bep20,
+        "#ffd21f",
+        `ethereum:${bep20}@${BSC_CHAIN_ID}`,
+        "Камера предложит кошелёк, в нём выбери USDT",
+      ),
+    );
+  }
 
   const ton = env("USDT_TON");
-  if (ton) methods.push(usdt("ton", "TON", ton, "#4db2ff"));
+  if (ton) {
+    methods.push(
+      usdt(
+        "ton",
+        "TON",
+        ton,
+        "#4db2ff",
+        `ton://transfer/${ton}?jetton=${USDT_TON_MASTER}`,
+        "Камера предложит открыть кошелёк",
+      ),
+    );
+  }
 
   return methods;
 }
