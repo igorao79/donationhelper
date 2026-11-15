@@ -191,7 +191,11 @@ export function DonateCard({ author, methods, initialId, streamSeconds }: Props)
 
                   <p className="field-label">{m.fieldLabel}</p>
                   <div className="value-box">
-                    <p className={`value${m.group === "rub" ? " value--big" : ""}`}>
+                    <p
+                      className={`value${m.group === "rub" ? " value--big" : ""}${
+                        m.compact ? " value--compact" : ""
+                      }`}
+                    >
                       {m.chunks.map((chunk, j) => (
                         <span key={j}>{chunk}</span>
                       ))}

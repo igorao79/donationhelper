@@ -69,6 +69,36 @@ export function getMethods(): Method[] {
     });
   }
 
+  const cardNumber = env("CARD_NUMBER")?.replace(/\D/g, "");
+  if (cardNumber) {
+    const holder = env("CARD_HOLDER");
+    const bank = env("CARD_BANK") ?? "Банковская карта";
+    const expiry = env("CARD_EXPIRY");
+
+    const details: string[] = [];
+    if (holder) details.push(`Получатель: ${holder}.`);
+    if (expiry) details.push(`Действует до ${expiry}.`);
+    details.push("Сверь имя перед отправкой.");
+
+    methods.push({
+      id: "card",
+      group: "rub",
+      tab: "Карта",
+      tabSub: bank,
+      eyebrow: bank,
+      title: "Карта",
+      fieldLabel: "Номер карты",
+      value: cardNumber,
+      chunks: byFour(cardNumber),
+      qr: cardNumber,
+      qrLabel: "Карта",
+      scanHint: "В QR номер карты: скопируй его в приложение банка",
+      note: details.join(" "),
+      compact: true,
+      color: "#ef3124",
+    });
+  }
+
   const wallet = env("YOOMONEY_WALLET");
   if (wallet) {
     const href = `https://yoomoney.ru/to/${wallet}`;
@@ -108,6 +138,33 @@ export function getMethods(): Method[] {
       scanHint: "В QR номер: вставь его в перевод по СБП",
       note: "В приложении банка выбери банк получателя: ЮMoney.",
       color: "#ff9ed8",
+    });
+  }
+
+  const donationAlerts = env("DONATIONALERTS_URL");
+  if (donationAlerts) {
+    const href = /^https?:\/\//i.test(donationAlerts)
+      ? donationAlerts
+      : `https://${donationAlerts}`;
+    const handle =
+      href.replace(/\/+$/, "").split("/").pop() || "DonationAlerts";
+
+    methods.push({
+      id: "donationalerts",
+      group: "rub",
+      tab: "Донаты",
+      tabSub: "DonationAlerts",
+      eyebrow: "DonationAlerts",
+      title: "Донаты",
+      fieldLabel: "Страница",
+      value: href,
+      chunks: [handle],
+      qr: href,
+      qrLabel: "DonationAlerts",
+      scanHint: "Откроется страница DonationAlerts",
+      note: "Открой страницу, укажи сумму и способ оплаты.",
+      link: { href, label: "Открыть DonationAlerts" },
+      color: "#ff6a00",
     });
   }
 

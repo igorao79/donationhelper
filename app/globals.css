@@ -319,6 +319,16 @@ a.head__author {
   font-size: 1.42em;
 }
 
+/* Номер карты: четыре группы по четыре цифры должны помещаться в строку */
+
+.value--compact {
+  font-size: 1.25em;
+}
+
+.value--compact span {
+  margin-right: 0.35em;
+}
+
 .copy {
   flex: none;
   display: flex;

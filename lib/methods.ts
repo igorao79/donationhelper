@@ -26,6 +26,8 @@ export type Method = {
   scanHint: string;
   note: string;
   link?: { href: string; label: string };
+  /** Длинное значение показываем чуть мельче, чтобы оно осталось в одну строку. */
+  compact?: boolean;
   color: string;
 };
 
